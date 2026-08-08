@@ -196,8 +196,7 @@ const NEWS_DATA = [
     featured: false,
     titleBn: "ক্যাশলেস পঞ্চগড়: ডিজিটাল ইউনিয়ন সেবায় নতুন দিগন্ত",
     titleEn: "Cashless Panchagarh: A new horizon in digital union services",
-    excerptBn: "অনলাইনে ইউনিয়ন ট্যাক্স পরিশোধ এবং প্রত্যয়নপত্র বিতরণের ফলে গ্রামীণ জনগণের জন্য সরকারি সেবা আধুনিক হয়েছে।
-",
+    excerptBn: "অনলাইনে ইউনিয়ন ট্যাক্স পরিশোধ এবং প্রত্যয়নপত্র বিতরণের ফলে গ্রামীণ জনগণের জন্য সরকারি সেবা আধুনিক হয়েছে।",
     excerptEn: "Paying union tax online and receiving certificates has modernized public service delivery for rural communities."
   },
   {
