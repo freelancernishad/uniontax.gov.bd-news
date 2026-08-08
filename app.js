@@ -305,9 +305,13 @@ let searchQuery = "";
 
 // DOM Elements
 const newsGrid = document.getElementById("news-grid");
+const videoGrid = document.getElementById("video-grid");
+const videoSectionWrapper = document.getElementById("video-section-wrapper");
+const newsSectionWrapper = document.getElementById("news-section-wrapper");
+const sectionMidDivider = document.getElementById("section-mid-divider");
+const globalNoResults = document.getElementById("global-no-results");
 const featuredGrid = document.getElementById("featured-grid");
 const searchInput = document.getElementById("search-input");
-const filterTabs = document.querySelectorAll(".filter-tab");
 const langToggle = document.getElementById("lang-toggle");
 const themeToggle = document.getElementById("theme-toggle");
 const themeIcon = document.getElementById("theme-icon");
@@ -411,50 +415,68 @@ function renderFeatured() {
 
 // Render Main Articles Grid with Filtering & Search
 function renderArticles() {
-  if (!newsGrid) return;
+  if (!newsGrid || !videoGrid) return;
+  
+  // Clear grids
   newsGrid.innerHTML = "";
+  videoGrid.innerHTML = "";
 
   const filtered = NEWS_DATA.filter(item => {
-    // Category filter
-    const matchesCategory = currentCategory === "all" || 
-      (currentCategory === "article" && item.category === "article") ||
-      (currentCategory === "video" && item.category === "video") ||
-      (currentCategory === "social" && item.category === "social");
-
     // Search query filter
     const title = (currentLang === "bn" ? item.titleBn : item.titleEn).toLowerCase();
     const excerpt = (currentLang === "bn" ? item.excerptBn : item.excerptEn).toLowerCase();
     const source = item.source.toLowerCase();
     const query = searchQuery.toLowerCase();
 
-    const matchesSearch = title.includes(query) || excerpt.includes(query) || source.includes(query);
-
-    return matchesCategory && matchesSearch;
+    return title.includes(query) || excerpt.includes(query) || source.includes(query);
   });
 
   // Update total count indicator
   if (totalArticlesCount) {
     const countText = currentLang === "bn" 
-      ? `মোট ${toBanglaNum(filtered.length)}টি সংবাদ খুঁজে পাওয়া গেছে`
+      ? `মোট ${toBanglaNum(filtered.length)}টি সংবাদ ও প্রতিবেদন পাওয়া গেছে`
       : `Found ${filtered.length} media reports`;
     totalArticlesCount.textContent = countText;
   }
 
-  if (filtered.length === 0) {
-    newsGrid.innerHTML = `
-      <div class="no-results">
-        <i class="fas fa-search-minus"></i>
-        <h3>${currentLang === "bn" ? "কোনো সংবাদ পাওয়া যায়নি" : "No Media Reports Found"}</h3>
-        <p>${currentLang === "bn" ? "অনুগ্রহ করে অন্য শব্দ দিয়ে আবার চেষ্টা করুন।" : "Please try searching for something else."}</p>
-      </div>
-    `;
-    return;
+  // Separate search matches into videos and articles
+  const videoItems = filtered.filter(item => item.category === "video" || item.category === "social");
+  const newsItems = filtered.filter(item => item.category === "article");
+
+  // Toggle Video Section visibility
+  if (videoItems.length > 0) {
+    videoSectionWrapper.style.display = "";
+    videoItems.forEach(item => {
+      const card = createCardElement(item, false);
+      videoGrid.appendChild(card);
+    });
+  } else {
+    videoSectionWrapper.style.display = "none";
   }
 
-  filtered.forEach(item => {
-    const card = createCardElement(item, false);
-    newsGrid.appendChild(card);
-  });
+  // Toggle News Section visibility
+  if (newsItems.length > 0) {
+    newsSectionWrapper.style.display = "";
+    newsItems.forEach(item => {
+      const card = createCardElement(item, false);
+      newsGrid.appendChild(card);
+    });
+  } else {
+    newsSectionWrapper.style.display = "none";
+  }
+
+  // Handle dividers and empty states
+  if (videoItems.length > 0 && newsItems.length > 0) {
+    if (sectionMidDivider) sectionMidDivider.style.display = "";
+  } else {
+    if (sectionMidDivider) sectionMidDivider.style.display = "none";
+  }
+
+  if (filtered.length === 0) {
+    if (globalNoResults) globalNoResults.style.display = "";
+  } else {
+    if (globalNoResults) globalNoResults.style.display = "none";
+  }
 }
 
 // Create Card DOM Element
@@ -592,16 +614,6 @@ function setupEventListeners() {
     });
   }
 
-  // Filter Tabs
-  filterTabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      filterTabs.forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-      currentCategory = tab.getAttribute("data-filter");
-      renderArticles();
-    });
-  });
-
   // Modal Closure
   if (closeModal) {
     closeModal.addEventListener("click", closeVideoPlayer);
@@ -650,12 +662,10 @@ const TRANSLATIONS = {
     statPress: "সংবাদপত্র ও অনলাইন রিপোর্ট",
     statVideos: "ভিডিও প্রতিবেদন ও সাক্ষাৎকার",
     featureTitle: "নির্বাচিত সংবাদ ও প্রতিবেদন সমূহ",
-    allPressTitle: "সকল গণমাধ্যম সংবাদ ও ভিডিও লিঙ্ক",
-    searchLabel: "খুঁজুন",
-    filterAll: "সকল মিডিয়া",
-    filterArticles: "সংবাদপত্র",
-    filterVideos: "ভিডিও প্রতিবেদন",
-    filterSocial: "সামাজিক মাধ্যম",
+    videoSectionTitle: "ভিডিও প্রতিবেদন ও সাক্ষাৎকার",
+    newsSectionTitle: "সংবাদপত্র ও অনলাইন পোর্টাল",
+    noResultsTitle: "কোনো সংবাদ পাওয়া যায়নি",
+    noResultsDesc: "অনুগ্রহ করে অন্য শব্দ দিয়ে আবার চেষ্টা করুন।",
     contactTitle: "প্রয়োজনীয় লিঙ্ক সমূহ",
     aboutPortal: "পোর্টাল সম্পর্কে",
     aboutPortalText: "এই প্রেস ও মিডিয়া পোর্টালটি পঞ্চগড়কে দেশের প্রথম ক্যাশলেস জেলা হিসেবে গড়ে তোলার লক্ষ্যে uniontax.gov.bd ডিজিটাল সিস্টেমের প্রচার ও মিডিয়ার সাফল্যগাথা তুলে ধরার জন্য নির্মিত হয়েছে।",
@@ -669,12 +679,10 @@ const TRANSLATIONS = {
     statPress: "Newspaper & Online Reports",
     statVideos: "Video Broadcasts & TV Reports",
     featureTitle: "Featured Press & Reports",
-    allPressTitle: "All Media Reports & Video Archive",
-    searchLabel: "Search",
-    filterAll: "All Media",
-    filterArticles: "Newspapers",
-    filterVideos: "Video Reports",
-    filterSocial: "Social Media",
+    videoSectionTitle: "Video Reports & Interviews",
+    newsSectionTitle: "Newspapers & Online Portals",
+    noResultsTitle: "No Media Reports Found",
+    noResultsDesc: "Please try searching for something else.",
     contactTitle: "Important Links",
     aboutPortal: "About the Portal",
     aboutPortalText: "This media archive portal showcases the promotional activities and success stories of the uniontax.gov.bd digital system, powering Panchagarh's transition into the first cashless district of Bangladesh.",

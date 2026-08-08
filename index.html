@@ -80,50 +80,51 @@
 
   <div class="section-divider"></div>
 
-  <!-- Featured Content Section -->
-  <section class="container featured-section">
-    <h2 class="section-title">
-      <i class="fas fa-star"></i>
-      <span data-translate="featureTitle">নির্বাচিত সংবাদ ও প্রতিবেদন সমূহ</span>
-    </h2>
-    <div class="featured-grid" id="featured-grid">
-      <!-- Populated via Javascript -->
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- Filter & Main News Section -->
+  <!-- Search & Content Section -->
   <main class="container">
-    <h2 class="section-title">
-      <i class="fas fa-folder-open"></i>
-      <span data-translate="allPressTitle">সকল গণমাধ্যম সংবাদ ও ভিডিও লিঙ্ক</span>
-    </h2>
-
-    <!-- Controls Card (Search + Filter Tabs) -->
-    <div class="controls-card">
+    
+    <!-- Global Search Bar -->
+    <div class="controls-card search-card-centered">
       <div class="search-box">
         <input type="text" id="search-input" placeholder="সংবাদপত্র বা শিরোনাম দিয়ে খুঁজুন...">
         <i class="fas fa-search"></i>
       </div>
-      
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all" data-translate="filterAll">সকল মিডিয়া</button>
-        <button class="filter-tab" data-filter="article" data-translate="filterArticles">সংবাদপত্র</button>
-        <button class="filter-tab" data-filter="video" data-translate="filterVideos">ভিডিও প্রতিবেদন</button>
-        <button class="filter-tab" data-filter="social" data-translate="filterSocial">সামাজিক মাধ্যম</button>
+      <div class="search-info-badge">
+        <span id="total-articles">লোডিং সংবাদসমূহ...</span>
       </div>
     </div>
 
-    <!-- Search/Count Info -->
-    <div class="articles-info">
-      <span id="total-articles">লোডিং সংবাদসমূহ...</span>
+    <!-- Section 1: Videos (First) -->
+    <section class="media-section" id="video-section-wrapper">
+      <h2 class="section-title">
+        <i class="fas fa-play-circle"></i>
+        <span data-translate="videoSectionTitle">ভিডিও প্রতিবেদন ও সাক্ষাৎকার</span>
+      </h2>
+      <div class="news-grid video-grid" id="video-grid">
+        <!-- Populated via Javascript -->
+      </div>
+    </section>
+
+    <div class="section-divider" id="section-mid-divider"></div>
+
+    <!-- Section 2: Articles (Second) -->
+    <section class="media-section" id="news-section-wrapper">
+      <h2 class="section-title">
+        <i class="fas fa-newspaper"></i>
+        <span data-translate="newsSectionTitle">সংবাদপত্র ও অনলাইন পোর্টাল</span>
+      </h2>
+      <div class="news-grid" id="news-grid">
+        <!-- Populated via Javascript -->
+      </div>
+    </section>
+
+    <!-- Global Empty State -->
+    <div class="no-results" id="global-no-results" style="display: none;">
+      <i class="fas fa-search-minus"></i>
+      <h3 data-translate="noResultsTitle">কোনো সংবাদ পাওয়া যায়নি</h3>
+      <p data-translate="noResultsDesc">অনুগ্রহ করে অন্য শব্দ দিয়ে আবার চেষ্টা করুন।</p>
     </div>
 
-    <!-- News Cards Grid -->
-    <div class="news-grid" id="news-grid">
-      <!-- Populated via Javascript -->
-    </div>
   </main>
 
   <!-- Video Lightbox Modal -->
