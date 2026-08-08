@@ -544,14 +544,20 @@ function createCardElement(item, isFeatured = false) {
       </div>
     `;
   } else {
-    // Generate a beautiful abstract background based on source name hash
-    const hash = item.source.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const angle = hash % 360;
-    const gradient = `linear-gradient(${angle}deg, var(--primary-light), var(--secondary-light))`;
+    let logoUrl = "";
+    try {
+      const domain = new URL(item.url).hostname;
+      logoUrl = `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
+    } catch (e) {
+      logoUrl = "";
+    }
     cardMediaHeader = `
-      <div class="card-media" style="background: ${gradient}">
+      <div class="card-media logo-banner">
         ${badgeHTML}
-        ${iconHTML}
+        <div class="portal-logo-wrapper">
+          <img src="${logoUrl}" alt="${item.source}" class="portal-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <i class="fas fa-newspaper portal-logo-fallback" style="display: none; font-size: 2rem; color: var(--primary);"></i>
+        </div>
       </div>
     `;
   }

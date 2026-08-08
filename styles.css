@@ -520,6 +520,41 @@ a {
   background: linear-gradient(135deg, #1877f2, #0e5fc2);
 }
 
+.card-media.logo-banner {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: radial-gradient(circle at 50% 50%, var(--primary-light) 0%, transparent 60%);
+}
+
+.portal-logo-wrapper {
+  background: white;
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  transition: transform var(--transition-fast);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.news-card:hover .portal-logo-wrapper {
+  transform: scale(1.1) rotate(2deg);
+}
+
+.portal-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
 .badge {
   position: absolute;
   top: 1rem;
